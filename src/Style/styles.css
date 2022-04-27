@@ -1,0 +1,72 @@
+body,html{
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 100vh;
+    background-color: rgb(226, 226, 226);
+  }
+  .root{
+    height: 100vh;
+  }
+
+.keepnote{
+    float: left;
+    margin: 16px;
+    width: 240px;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px #ccc;
+    border-radius: 5px;
+}
+.keepnote h1{
+    margin-bottom: 6px;
+    font-size: 1.1em;
+}
+.keepnote p{
+    margin-bottom: 10px;
+    font-size: 1.1em;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+.para{
+    color: black;
+    text-align: left;
+}
+
+.header{
+    height: 70px;
+    width: 100%;
+    background-color: #f5ba13;
+    color: white;
+    display: flex;
+    align-items: flex-end;
+    box-shadow: 0 0 10px 0 rgba(0,0,0,0.3);
+}
+.header h1{
+    font-size: 25px;
+    padding-left: 8px;
+    font-family: 'Merienda', cursive;
+}
+
+footer{
+    position: absolute;
+    bottom: 5px;
+    width: 100%;
+}
+
+footer p{
+    color: rgb(139, 139, 139);
+    text-align: center;
+}
+
+.body{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-content: space-between;
+}
+Header{
+    height: 15vh;
+}
+Footer{
+    height: 10vh;
+}
