@@ -1,19 +1,46 @@
-import React from "react"
+import React, { useState } from "react";
+import Header from "./Components/Header";
+import Footer from "./Components/Footer";
+import Note from "./Components/Note";
+import CreateArea from "./Components/CreateArea";
 
-import Header from "./Components/Header"
-import KeepNote from "./Components/KeepNote"
-import Footer from "./Components/Footer"
+import './Style/styles.css'
 
-import "./Style/styles.css"
+function App() {
+  const [notes, setNotes] = useState([]);
 
-function App(){
-    return (
-        <div className="body">
-            <Header />
-            <KeepNote />
-            <Footer />
-        </div>
-    );
+  function addNote(newNote) {
+    setNotes(prevNotes => {
+      return [...prevNotes, newNote];
+    });
+  }
+
+  function deleteNote(id) {
+    setNotes(prevNotes => {
+      return prevNotes.filter((noteItem, index) => {
+        return index !== id;
+      });
+    });
+  }
+
+  return (
+    <div>
+      <Header />
+      <CreateArea onAdd={addNote} />
+      {notes.map((noteItem, index) => {
+        return (
+          <Note
+            key={index}
+            id={index}
+            title={noteItem.title}
+            content={noteItem.content}
+            onDelete={deleteNote}
+          />
+        );
+      })}
+      <Footer />
+    </div>
+  );
 }
 
 export default App;
