@@ -1,5 +1,4 @@
 import React from "react";
-import HighlightIcon from "@material-ui/icons/Highlight";
 
 function Note(props) {
   function handleClick() {
