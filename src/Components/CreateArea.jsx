@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import AddIcon from "@material-ui/icons/Add";
-import Fab from "@material-ui/core/Fab";
-import Zoom from "@material-ui/core/Zoom";
+import AddIcon from '@mui/icons-material/Add';
 
 function CreateArea(props) {
   const [isExpanded, setExpanded] = useState(false);
@@ -36,11 +34,11 @@ function CreateArea(props) {
   }
 
   return (
-    <div>
-      <form className="create-note">
+    <div className="px-[150px] pt-[50px] relative w-full h-[40%] flex justify-start z-0">
+      <form className="create-note flex flex-col border border-gray-300 h-fit p-5 rounded-md lg:w-[40%] w-[80%] mx-auto">
         {isExpanded && (
           <input
-            className="input"
+            className="input focus:border-none p-2 font-display"
             name="title"
             onChange={handleChange}
             value={note.title}
@@ -49,7 +47,7 @@ function CreateArea(props) {
         )}
 
         <textarea
-          className="input"
+          className="input focus:border-none p-2 font-display"
           name="content"
           onClick={expand}
           onChange={handleChange}
@@ -57,11 +55,10 @@ function CreateArea(props) {
           placeholder="Take a note..."
           rows={isExpanded ? 3 : 1}
         />
-        <Zoom in={isExpanded}>
-          <Fab onClick={submitNote}>
-            <AddIcon />
-          </Fab>
-        </Zoom>
+
+         {isExpanded ? <div onClick={submitNote} className="h-10 w-10 bg-[#f5ba13] rounded-full translate-x-[380px] translate-y-10 flex justify-center items-center cursor-pointer">
+          <AddIcon className="text-white"/>
+        </div>: <></>} 
       </form>
     </div>
   );

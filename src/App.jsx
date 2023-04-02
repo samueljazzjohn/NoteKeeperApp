@@ -4,8 +4,6 @@ import Footer from "./Components/Footer";
 import Note from "./Components/Note";
 import CreateArea from "./Components/CreateArea";
 
-import './Style/styles.css'
-
 function App() {
   const [notes, setNotes] = useState([]);
 
@@ -24,9 +22,10 @@ function App() {
   }
 
   return (
-    <div>
-      <Header />
+    <div className="h-[100%] w-full justify-between">
+      <Header/>
       <CreateArea onAdd={addNote} />
+      <div className="z-10 grid grid-cols-3 gap-5 justify-center overflow-x-scroll px-[150px] py-[50px] shrink-0">
       {notes.map((noteItem, index) => {
         return (
           <Note
@@ -38,6 +37,7 @@ function App() {
           />
         );
       })}
+      </div>
       <Footer />
     </div>
   );
