@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import AddIcon from '@mui/icons-material/Add';
+import { toast } from "react-hot-toast";
 
 function CreateArea(props) {
   const [isExpanded, setExpanded] = useState(false);
@@ -21,12 +22,16 @@ function CreateArea(props) {
   }
 
   function submitNote(event) {
-    props.onAdd(note);
-    setNote({
-      title: "",
-      content: ""
-    });
-    event.preventDefault();
+    if(note["title"]==''&&note["content"]==''){
+      toast.error('Cannot create empty note')
+    }else{
+      props.onAdd(note);
+      setNote({
+        title: "",
+        content: ""
+      });
+      event.preventDefault();
+    }
   }
 
   function expand() {
@@ -38,7 +43,8 @@ function CreateArea(props) {
       <form className="create-note flex flex-col border border-gray-300 h-fit p-5 rounded-md lg:w-[40%] w-[80%] mx-auto">
         {isExpanded && (
           <input
-            className="input focus:border-none p-2 font-display"
+            className="input focus:border-none focus:outline-none p-2 font-display"
+            tabIndex={1}
             name="title"
             onChange={handleChange}
             value={note.title}
@@ -47,8 +53,9 @@ function CreateArea(props) {
         )}
 
         <textarea
-          className="input focus:border-none p-2 font-display"
+          className="input focus:border-transparent focus:outline-none p-2 font-display focus:shadow-none" 
           name="content"
+          tabIndex={2}
           onClick={expand}
           onChange={handleChange}
           value={note.content}
