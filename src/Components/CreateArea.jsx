@@ -7,7 +7,7 @@ function CreateArea(props) {
 
   const [note, setNote] = useState({
     title: "",
-    content: ""
+    description: ""
   });
 
   function handleChange(event) {
@@ -22,13 +22,13 @@ function CreateArea(props) {
   }
 
   function submitNote(event) {
-    if(note["title"]==''&&note["content"]==''){
+    if(note["title"]==''&&note["description"]==''){
       toast.error('Cannot create empty note')
     }else{
       props.onAdd(note);
       setNote({
         title: "",
-        content: ""
+        description: ""
       });
       event.preventDefault();
     }
@@ -54,11 +54,11 @@ function CreateArea(props) {
 
         <textarea
           className="input focus:border-transparent focus:outline-none p-2 font-display focus:shadow-none" 
-          name="content"
+          name="description"
           tabIndex={2}
           onClick={expand}
           onChange={handleChange}
-          value={note.content}
+          value={note.description}
           placeholder="Take a note..."
           rows={isExpanded ? 3 : 1}
         />

@@ -8,7 +8,7 @@ function Header({dropDown,setDropdown}) {
     setDropdown(!dropDown)
   }
   return (
-    <header className="sticky top-0 h-[10%] bg-[#f5ba13] flex flex-row justify-between items-center px-10 z-20">
+    <header className="sticky top-0 h-[10%] md:h-[8%] bg-[#f5ba13] flex flex-row justify-between items-center px-10 z-20">
       <h1 className="text-red text-white font-display font-[600] text-[30px]">
         <HighlightIcon className="-translate-y-1 m-2"/>
         Keeper
