@@ -39,7 +39,7 @@ function CreateArea(props) {
   }
 
   return (
-    <div className="px-[150px] pt-[50px] relative w-full h-[40%] flex justify-start z-0">
+    <div className="px-2 md:px-[150px] pt-[50px] relative w-full h-[40%] flex justify-start z-0">
       <form className="create-note flex flex-col border border-gray-300 h-fit p-5 rounded-md lg:w-[40%] w-[80%] mx-auto">
         {isExpanded && (
           <input
