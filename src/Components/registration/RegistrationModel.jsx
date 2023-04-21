@@ -10,7 +10,7 @@ import { toast } from 'react-hot-toast';
 
 const RegistrationModel = ({ setRegistrationModel, setLoginModel }) => {
 
-    const [addUser] = useMutation(REGISTER_USER);
+    const [registerUser] = useMutation(REGISTER_USER);
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm({ resolver: yupResolver(schema) })
 
@@ -21,7 +21,7 @@ const RegistrationModel = ({ setRegistrationModel, setLoginModel }) => {
 
     const onSubmit = (data) => {
         console.log(data)
-        addUser({ variables: { username: data.username, email: data.email, password: data.password } })
+        registerUser({ variables: { username: data.username, email: data.email, password: data.password } })
         .then((res) => {
              console.log(res) 
              toast.success('Registration Successful')

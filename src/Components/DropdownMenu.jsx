@@ -9,7 +9,8 @@ const DropdownMenu = (props) => {
     }
 
     const handleLogout = () => {
-        props.setLoginModel(false)
+        props.setLoggedIn(false)
+        localStorage.clear()
     }
     return (
         <>

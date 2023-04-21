@@ -3,8 +3,13 @@ import { useForm } from 'react-hook-form'
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Popover } from 'react-tiny-popover';
+import { useMutation } from '@apollo/client'
+import { LOGIN_USER } from '../../mutations/userMutations';
+import { toast } from 'react-hot-toast';
 
-const LoginModel = ({ setLoginModel, setLoggedIn }) => {
+const LoginModel = ({ setLoginModel, setLoggedIn,setRegistrationModel }) => {
+
+    const [loginUser] = useMutation(LOGIN_USER);
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm({ resolver: yupResolver(schema) })
 
@@ -14,8 +19,24 @@ const LoginModel = ({ setLoginModel, setLoggedIn }) => {
     }
 
     const onSubmit = (data) => {
-        console.log(data)
+        // console.log(data)
+        loginUser({ variables: {email: data.email, password: data.password } }).then((res)=>{
+            console.log(res.data.login.token)
+            toast.success('Login Successful')
+            localStorage.setItem('token',res.data.login.token)
+            localStorage.setItem('isLoggedIn',true)
+            setLoggedIn(true)
+            handleClose()
+        }).catch((err)=>{
+            console.log(err)
+            toast.error('Login Failed')
+        })
         reset();
+    }
+
+    const handleRegister=()=>{
+        setLoginModel(false)
+        setRegistrationModel(true)
     }
     return (
         <>
@@ -51,7 +72,7 @@ const LoginModel = ({ setLoginModel, setLoggedIn }) => {
                                 </div>
                                 <button type="submit" className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">Login to your account</button>
                                 <div className="text-sm font-medium text-gray-500 ">
-                                    Not registered? <a href="#" className="text-blue-700 hover:underline">Create account</a>
+                                    Not registered? <a onClick={handleRegister} href="#" className="text-blue-700 hover:underline">Create account</a>
                                 </div>
                             </form>
                         </div>
