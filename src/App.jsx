@@ -7,15 +7,8 @@ import { Toaster } from "react-hot-toast";
 import DropdownMenu from "./Components/DropdownMenu";
 import LoginModel from "./Components/login/LoginModel";
 import { ApolloProvider, ApolloClient, InMemoryCache, gql, useQuery } from '@apollo/client';
-
-const GET_NOTES = gql`
-    query getNotes {
-        Notes(id:"643c09bafa4b04106d925779"){
-          title,
-          description
-        }
-    }
-`
+import { GET_NOTES } from "./queries/noteQueries";
+import RegistrationModel from "./Components/registration/RegistrationModel";
 
 
 function App() {
@@ -24,6 +17,7 @@ function App() {
   const [dropDown, setDropdown] = useState(false)
   const [loggedIn, setLoggedIn] = useState(false)
   const [loginModel, setLoginModel] = useState(false)
+  const [registrationModel, setRegistrationModel] = useState(false)
 
   const ref = useRef()
 
@@ -53,11 +47,10 @@ function App() {
         <div className="h-screen w-full justify-between">
           <Header dropDown={dropDown} setDropdown={setDropdown} />
           <CreateArea onAdd={addNote} />
-          {loginModel && <LoginModel className='z-999' setLoginModel={setLoginModel} setLoggedIn={setLoggedIn} />}
+          {loginModel && <LoginModel className='z-999' setLoginModel={setLoginModel} setRegistrationModel={setRegistrationModel} setLoggedIn={setLoggedIn} />}
+          {registrationModel && <RegistrationModel className='z-99999' setRegistrationModel={setRegistrationModel} setLoginModel={setLoginModel}/>}
           <DropdownMenu refVar={ref} DropdownStatus={dropDown} loggedIn={loggedIn} setLoginModel={setLoginModel} />
           <div className="z-10 grid grid-cols-3 gap-5 justify-center overflow-x-scroll px-[150px] py-[50px] shrink-0">
-            {loading && <p>Loading...</p>}
-            {error && <p>Error :</p>}
             {!loading && !error && notes.map((noteItem, index) => {
               return (
                 <Note
