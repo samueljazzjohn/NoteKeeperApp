@@ -33,7 +33,13 @@ function App() {
     }
   }, [ref])
 
-  const { loading, error, data } = useQuery(GET_NOTES)
+  const { loading, error, data } = useQuery(GET_NOTES,{
+    context: {
+      headers: {
+        authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    }
+  })
 
 
   useEffect(()=>{
