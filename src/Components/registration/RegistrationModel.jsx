@@ -15,7 +15,7 @@ const RegistrationModel = ({ setRegistrationModel, setLoginModel }) => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm({ resolver: yupResolver(schema) })
 
     const handleClose = () => {
-        setLoginModel(false)
+        setRegistrationModel(false)
         document.body.style.overflow = 'auto';
     }
 

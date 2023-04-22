@@ -1,9 +1,26 @@
 import React, { useState } from "react";
 import AddIcon from '@mui/icons-material/Add';
 import { toast } from "react-hot-toast";
+import { useMutation } from "@apollo/client";
+import {  ADD_NOTE } from "../mutations/noteMutations";
 
 function CreateArea(props) {
   const [isExpanded, setExpanded] = useState(false);
+
+  const [createNote] = useMutation(ADD_NOTE, {
+    context: {
+      headers: {
+        authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        },
+        onCompleted: (data) => {
+          console.log(data);
+        },
+        onError: (error) => {
+          console.log(error);
+        },
+      }
+)
 
   const [note, setNote] = useState({
     title: "",
@@ -25,6 +42,9 @@ function CreateArea(props) {
     if(note["title"]==''&&note["description"]==''){
       toast.error('Cannot create empty note')
     }else{
+      createNote({variables: {title: note["title"], description: note["description"]}}).then((data) => {
+        console.log(data);
+      });
       props.onAdd(note);
       setNote({
         title: "",
