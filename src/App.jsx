@@ -36,9 +36,15 @@ function App() {
   const { loading, error, data } = useQuery(GET_NOTES,{
     context: {
       headers: {
-        authorization: `Bearer ${localStorage.getItem('token')}`
-      }
-    }
+        "authorization": `Bearer ${localStorage.getItem("token")}`,
+        },
+        },
+        onCompleted: (data) => {
+          console.log("get notes:",data);
+        },
+        onError: (error) => {
+          console.log(error);
+        },
   })
 
 
