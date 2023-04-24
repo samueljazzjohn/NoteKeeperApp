@@ -22,4 +22,13 @@ const DELETE_NOTE = gql`
     }
 `;
 
-export { ADD_NOTE,DELETE_NOTE }
+const UPDATE_NOTE = gql`
+    mutation updateNote($id: ID!, $title: String!, $description: String!) {
+        updateNote(id: $id, title: $title, description: $description) {
+            title,
+            description
+        }
+    }
+`;
+
+export { ADD_NOTE,DELETE_NOTE,UPDATE_NOTE }
