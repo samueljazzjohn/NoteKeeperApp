@@ -10,7 +10,7 @@ function CreateArea(props) {
   const [createNote] = useMutation(ADD_NOTE, {
     context: {
       headers: {
-        authorization: `Bearer ${localStorage.getItem("token")}`,
+        "authorization": `Bearer ${localStorage.getItem("token")}`,
         },
         },
         onCompleted: (data) => {
