@@ -51,7 +51,8 @@ function App() {
           console.log("get notes:",data);
         },
         onError: (error) => {
-          console.log(error);
+          console.log(error.message);
+          localStorage.clear();
         },
   })
 
@@ -75,7 +76,7 @@ function App() {
               return (
                 <Note
                   key={index}
-                  id={index}
+                  id={noteItem.id}
                   title={noteItem.title}
                   description={noteItem.description}
                   onDelete={deleteNote}
