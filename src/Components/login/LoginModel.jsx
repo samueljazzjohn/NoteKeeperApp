@@ -21,8 +21,9 @@ const LoginModel = ({ setLoginModel, setLoggedIn,setRegistrationModel }) => {
     const onSubmit = (data) => {
         // console.log(data)
         loginUser({ variables: {email: data.email, password: data.password } }).then((res)=>{
-            console.log(res.data.login.token)
+            console.log(res.data.login)
             toast.success('Login Successful')
+            // localStorage.setItem('username',res.data.login.username)
             localStorage.setItem('token',res.data.login.token)
             localStorage.setItem('isLoggedIn',true)
             setLoggedIn(true)
