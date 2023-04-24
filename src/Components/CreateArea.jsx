@@ -3,11 +3,13 @@ import AddIcon from '@mui/icons-material/Add';
 import { toast } from "react-hot-toast";
 import { useMutation } from "@apollo/client";
 import {  ADD_NOTE } from "../mutations/noteMutations";
+import { GET_NOTES } from "../queries/noteQueries";
 
 function CreateArea(props) {
   const [isExpanded, setExpanded] = useState(false);
 
   const [createNote] = useMutation(ADD_NOTE, {
+    refetchQueries: [{ query: GET_NOTES }],
     context: {
       headers: {
         "authorization": `Bearer ${localStorage.getItem("token")}`,
