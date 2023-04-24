@@ -9,15 +9,20 @@ import LoginModel from "./Components/login/LoginModel";
 import { ApolloProvider, ApolloClient, InMemoryCache, gql, useQuery } from '@apollo/client';
 import { GET_NOTES } from "./queries/noteQueries";
 import RegistrationModel from "./Components/registration/RegistrationModel";
+import NoteModel from "./Components/note/NoteModel";
 
 
 function App() {
 
   const [notes, setNotes] = useState([]);
+  const [noteTitle, setNoteTitle] = useState("");
+  const [noteDescription, setNoteDescription] = useState("");
+  const [noteId, setNoteId] = useState("");
   const [dropDown, setDropdown] = useState(false)
   const [loggedIn, setLoggedIn] = useState()
   const [loginModel, setLoginModel] = useState(false)
   const [registrationModel, setRegistrationModel] = useState(false)
+  const [noteModel,setNoteModel]=React.useState(false)
 
   const ref = useRef()
 
@@ -80,11 +85,16 @@ function App() {
                   title={noteItem.title}
                   description={noteItem.description}
                   onDelete={deleteNote}
+                  setNoteId={setNoteId}
+                  setNoteTitle={setNoteTitle}
+                  setNoteDescription={setNoteDescription}
+                  setNoteModel={setNoteModel}
                 />
               );
             })}
           </div>
-          <Toaster position="bottom-right" />
+          {noteModel && <NoteModel Id={noteId} Description={noteDescription} Title={noteTitle} setNoteModel={setNoteModel} />}
+          <Toaster position="top-center" />
           <Footer />
         </div>
     </>
