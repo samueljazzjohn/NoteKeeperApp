@@ -15,11 +15,19 @@ function App() {
 
   const [notes, setNotes] = useState([]);
   const [dropDown, setDropdown] = useState(false)
-  const [loggedIn, setLoggedIn] = useState(false)
+  const [loggedIn, setLoggedIn] = useState()
   const [loginModel, setLoginModel] = useState(false)
   const [registrationModel, setRegistrationModel] = useState(false)
 
   const ref = useRef()
+
+  useEffect(() => {
+    if(localStorage.getItem("loggedIn")){
+      setLoggedIn(true)
+    }else{
+      setLoggedIn(false)
+    }
+  },[loggedIn])
 
   useEffect(() => {
     const handleClickOutside = (event) => {
