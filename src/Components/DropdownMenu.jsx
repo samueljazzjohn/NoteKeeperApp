@@ -11,6 +11,7 @@ const DropdownMenu = (props) => {
     const handleLogout = () => {
         props.setLoggedIn(false)
         localStorage.clear()
+        window.location.reload();
     }
     return (
         <>
