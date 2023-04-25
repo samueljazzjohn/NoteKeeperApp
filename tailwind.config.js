@@ -7,10 +7,12 @@ module.exports = {
     fontFamily: {
       display: ["Alkatra"],
     },
-    colors:{
-      header:"#f5ba13",
-      button:"#bg-blue-700",
-      hoverButton:"#bg-blue-800",
+    extend:{
+      colors:{
+        header:"#f5ba13",
+        button:"#bg-blue-700",
+        hoverButton:"#bg-blue-800",
+      }
     }
   },
   plugins: [],
