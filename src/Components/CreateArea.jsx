@@ -44,9 +44,11 @@ function CreateArea(props) {
     if(note["title"]==''&&note["description"]==''){
       toast.error('Cannot create empty note')
     }else{
-      createNote({variables: {title: note["title"], description: note["description"]}}).then((data) => {
-        console.log(data);
-      });
+      if(localStorage.getItem('isLoggedIn')){
+        createNote({variables: {title: note["title"], description: note["description"]}}).then((data) => {
+          console.log(data);
+        });
+      }
       props.onAdd(note);
       setNote({
         title: "",
