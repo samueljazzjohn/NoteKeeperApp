@@ -23,8 +23,7 @@ function App() {
   const [loginModel, setLoginModel] = useState(false)
   const [registrationModel, setRegistrationModel] = useState(false)
   const [noteModel, setNoteModel] = React.useState(false)
-  let [page, setPage] = useState(1)
-  const [lastNoteRef, setLastNoteRef] = useState(null);
+  const [offset, setOffset] = useState(0)
 
   const ref = useRef()
 
@@ -54,8 +53,8 @@ function App() {
         "authorization": `Bearer ${localStorage.getItem("token")}`,
       },
     },
-    // skip: page = 1,
-    // variables: { page },
+    variables: { first: 10, offset },
+    notifyOnNetworkStatusChange: true,
     onCompleted: (data) => {
       console.log("get notes:", data);
     },
@@ -72,6 +71,17 @@ function App() {
     }
   }, [data])
 
+  const handleScroll = (event) => {
+    const { scrollTop, clientHeight, scrollHeight } = event.target;
+
+    if (scrollTop + clientHeight === scrollHeight) {
+      fetchMore({
+        variables: { first: 10, offset: offset + 10 },
+      });
+      setOffset((prevOffset) => prevOffset + 10);
+    }
+  };
+
   return (
     <>
       <div className="h-screen w-full justify-between">
@@ -80,23 +90,23 @@ function App() {
         {loginModel && <LoginModel className='z-999' setLoginModel={setLoginModel} setRegistrationModel={setRegistrationModel} setLoggedIn={setLoggedIn} />}
         {registrationModel && <RegistrationModel className='z-99999' setRegistrationModel={setRegistrationModel} setLoginModel={setLoginModel} />}
         <DropdownMenu refVar={ref} DropdownStatus={dropDown} loggedIn={loggedIn} setLoginModel={setLoginModel} setLoggedIn={setLoggedIn} />
-        <div className="z-10 grid grid-cols-3 gap-5 justify-center overflow-x-scroll px-[150px] py-[50px] shrink-0">
+        <div className="z-10 grid grid-cols-3 gap-5 justify-center overflow-x-scroll px-[150px] py-[50px] shrink-0" onScroll={handleScroll}>
           {notes.map((noteItem, index) => {
-              return (
-                <Note
-                  key={index}
-                  id={noteItem.id}
-                  title={noteItem.title}
-                  description={noteItem.description}
-                  onDelete={deleteNote}
-                  setNoteId={setNoteId}
-                  setNoteTitle={setNoteTitle}
-                  setNoteDescription={setNoteDescription}
-                  setNoteModel={setNoteModel}
-                />
-              );
-            })}
-          
+            return (
+              <Note
+                key={index}
+                id={noteItem.id}
+                title={noteItem.title}
+                description={noteItem.description}
+                onDelete={deleteNote}
+                setNoteId={setNoteId}
+                setNoteTitle={setNoteTitle}
+                setNoteDescription={setNoteDescription}
+                setNoteModel={setNoteModel}
+              />
+            );
+          })}
+
         </div>
         {noteModel && <NoteModel Id={noteId} Description={noteDescription} Title={noteTitle} setNoteModel={setNoteModel} />}
         <Toaster position="top-center" />
