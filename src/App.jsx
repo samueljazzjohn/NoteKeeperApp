@@ -22,17 +22,19 @@ function App() {
   const [loggedIn, setLoggedIn] = useState()
   const [loginModel, setLoginModel] = useState(false)
   const [registrationModel, setRegistrationModel] = useState(false)
-  const [noteModel,setNoteModel]=React.useState(false)
+  const [noteModel, setNoteModel] = React.useState(false)
+  let [page, setPage] = useState(1)
+  const [lastNoteRef, setLastNoteRef] = useState(null);
 
   const ref = useRef()
 
   useEffect(() => {
-    if(localStorage.getItem("loggedIn")){
+    if (localStorage.getItem("loggedIn")) {
       setLoggedIn(true)
-    }else{
+    } else {
       setLoggedIn(false)
     }
-  },[loggedIn])
+  }, [loggedIn])
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -46,38 +48,40 @@ function App() {
     }
   }, [ref])
 
-  const { loading, error, data } = useQuery(GET_NOTES,{
+  const { loading, error, data, fetchMore } = useQuery(GET_NOTES, {
     context: {
       headers: {
         "authorization": `Bearer ${localStorage.getItem("token")}`,
-        },
-        },
-        onCompleted: (data) => {
-          console.log("get notes:",data);
-        },
-        onError: (error) => {
-          console.log(error.message);
-          localStorage.clear();
-        },
+      },
+    },
+    // skip: page = 1,
+    // variables: { page },
+    onCompleted: (data) => {
+      console.log("get notes:", data);
+    },
+    onError: (error) => {
+      console.log(error.message);
+      localStorage.clear();
+    },
   })
 
 
-  useEffect(()=>{
-    if(data){
+  useEffect(() => {
+    if (data) {
       setNotes(data.Notes)
     }
-  },[data])
+  }, [data])
 
   return (
     <>
-        <div className="h-screen w-full justify-between">
-          <Header dropDown={dropDown} setDropdown={setDropdown} />
-          <CreateArea onAdd={addNote} />
-          {loginModel && <LoginModel className='z-999' setLoginModel={setLoginModel} setRegistrationModel={setRegistrationModel} setLoggedIn={setLoggedIn} />}
-          {registrationModel && <RegistrationModel className='z-99999' setRegistrationModel={setRegistrationModel} setLoginModel={setLoginModel}/>}
-          <DropdownMenu refVar={ref} DropdownStatus={dropDown} loggedIn={loggedIn} setLoginModel={setLoginModel} setLoggedIn={setLoggedIn} />
-          <div className="z-10 grid grid-cols-3 gap-5 justify-center overflow-x-scroll px-[150px] py-[50px] shrink-0">
-            {notes.map((noteItem, index) => {
+      <div className="h-screen w-full justify-between">
+        <Header dropDown={dropDown} setDropdown={setDropdown} />
+        <CreateArea onAdd={addNote} />
+        {loginModel && <LoginModel className='z-999' setLoginModel={setLoginModel} setRegistrationModel={setRegistrationModel} setLoggedIn={setLoggedIn} />}
+        {registrationModel && <RegistrationModel className='z-99999' setRegistrationModel={setRegistrationModel} setLoginModel={setLoginModel} />}
+        <DropdownMenu refVar={ref} DropdownStatus={dropDown} loggedIn={loggedIn} setLoginModel={setLoginModel} setLoggedIn={setLoggedIn} />
+        <div className="z-10 grid grid-cols-3 gap-5 justify-center overflow-x-scroll px-[150px] py-[50px] shrink-0">
+          {notes.map((noteItem, index) => {
               return (
                 <Note
                   key={index}
@@ -92,11 +96,12 @@ function App() {
                 />
               );
             })}
-          </div>
-          {noteModel && <NoteModel Id={noteId} Description={noteDescription} Title={noteTitle} setNoteModel={setNoteModel} />}
-          <Toaster position="top-center" />
-          <Footer />
+          
         </div>
+        {noteModel && <NoteModel Id={noteId} Description={noteDescription} Title={noteTitle} setNoteModel={setNoteModel} />}
+        <Toaster position="top-center" />
+        <Footer />
+      </div>
     </>
   );
 
