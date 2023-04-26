@@ -11,6 +11,7 @@ import CloseIcon from '@mui/icons-material/Close';
 function CreateArea(props) {
   const [isExpanded, setExpanded] = useState(false);
   const [optionsState, setOptionsState] = useState(false);
+  const [isListing,setListing]=useState(false)
 
   const [createNote] = useMutation(ADD_NOTE, {
     refetchQueries: [{ query: GET_NOTES }],
@@ -35,13 +36,71 @@ function CreateArea(props) {
 
   function handleChange(event) {
     const { name, value } = event.target;
+    const currentLineIndex = event.target.selectionStart;
+    if (isListing) {
+      // Add a bullet point to each line after the current line
+      const lines = value.split("\n");
+      let length = 0;
+      const newValue = lines
+        .map((line, index) => {
+          length=length+line.length+1;
+          if (length >= currentLineIndex - 1) {
+            return line.replace(/^(?!\s*•\s*)/, "• ");
+          } else {
+            return line;
+          }
+        })
+        .join("\n");
+      setNote((prevNote) => {
+        return {
+          ...prevNote,
+          [name]: newValue,
+        };
+      });
+    } else {
+      setNote((prevNote) => {
+        return {
+          ...prevNote,
+          [name]: value,
+        };
+      });
+    }
+  }
+  
+  
 
-    setNote(prevNote => {
-      return {
-        ...prevNote,
-        [name]: value
-      };
-    });
+  // function handleChange(event) {
+  //   const { name, value } = event.target;
+  //   console.log(value.split("/n"));
+  //   // console.log(value.split("/n").length);
+  //   if (isListing) {
+  //     // Add a bullet point to the beginning of the line
+  //     const newValue = value.replace(/^(?!\s*•\s*)/gm, "• ");
+  //     setNote(prevNote => {
+  //       return {
+  //         ...prevNote,
+  //         [name]: newValue
+  //       };
+  //     });
+  //   } else {
+  //     setNote(prevNote => {
+  //       return {
+  //         ...prevNote,
+  //         [name]: value
+  //       };
+  //     });
+  //   }
+
+  //   // setNote(prevNote => {
+  //   //   return {
+  //   //     ...prevNote,
+  //   //     [name]: value
+  //   //   };
+  //   // });
+  // }
+
+  const toggleListing=()=> {
+    setListing(!isListing);
   }
 
   function submitNote(event) {
@@ -71,7 +130,7 @@ function CreateArea(props) {
       <form className="create-note relative flex flex-col border border-gray-300 h-fit p-5 rounded-md lg:w-[40%] w-[80%] mx-auto">
       {isExpanded && !optionsState && <MoreVertIcon onClick={()=>{setOptionsState(true)}} className="absolute top-3 right-3 cursor-pointer text-gray-300 " />}
       {isExpanded && optionsState && <CloseIcon onClick={()=>{setOptionsState(false)}} className="absolute top-3 right-3 cursor-pointer text-gray-300 " />}
-      {optionsState && <OptionsDropdown/>}
+      {optionsState && <OptionsDropdown toggleListing={toggleListing} setOptionsState={setOptionsState}/>}
         {isExpanded && (
           <input
             className="input focus:border-none focus:outline-none p-2 font-display"
@@ -91,7 +150,7 @@ function CreateArea(props) {
           onChange={handleChange}
           value={note.description}
           placeholder="Take a note..."
-          rows={isExpanded ? 3 : 1}
+          rows={isExpanded ? 5 : 1}
         />
 
          {isExpanded ? <div onClick={submitNote} className="h-10 w-10 bg-[#f5ba13] rounded-full translate-x-[380px] translate-y-10 flex justify-center items-center cursor-pointer">
