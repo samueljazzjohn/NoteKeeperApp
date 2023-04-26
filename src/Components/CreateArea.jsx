@@ -37,14 +37,14 @@ function CreateArea(props) {
   function handleChange(event) {
     const { name, value } = event.target;
     const currentLineIndex = event.target.selectionStart;
-    if (isListing) {
+    if (isListing&&name=='description') {
       // Add a bullet point to each line after the current line
       const lines = value.split("\n");
       let length = 0;
       const newValue = lines
         .map((line, index) => {
           length=length+line.length+1;
-          if (length >= currentLineIndex - 1) {
+          if (length >= currentLineIndex ) {
             return line.replace(/^(?!\s*•\s*)/, "• ");
           } else {
             return line;
@@ -67,40 +67,9 @@ function CreateArea(props) {
     }
   }
   
-  
 
-  // function handleChange(event) {
-  //   const { name, value } = event.target;
-  //   console.log(value.split("/n"));
-  //   // console.log(value.split("/n").length);
-  //   if (isListing) {
-  //     // Add a bullet point to the beginning of the line
-  //     const newValue = value.replace(/^(?!\s*•\s*)/gm, "• ");
-  //     setNote(prevNote => {
-  //       return {
-  //         ...prevNote,
-  //         [name]: newValue
-  //       };
-  //     });
-  //   } else {
-  //     setNote(prevNote => {
-  //       return {
-  //         ...prevNote,
-  //         [name]: value
-  //       };
-  //     });
-  //   }
-
-  //   // setNote(prevNote => {
-  //   //   return {
-  //   //     ...prevNote,
-  //   //     [name]: value
-  //   //   };
-  //   // });
-  // }
-
-  const toggleListing=()=> {
-    setListing(!isListing);
+  const toggleListing=(state)=> {
+    setListing(state);
   }
 
   function submitNote(event) {
