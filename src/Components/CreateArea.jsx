@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useRef, useState,useEffect } from "react";
 import AddIcon from '@mui/icons-material/Add';
 import { toast } from "react-hot-toast";
 import { useMutation } from "@apollo/client";
 import {  ADD_NOTE } from "../mutations/noteMutations";
 import { GET_NOTES } from "../queries/noteQueries";
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import OptionsDropdown from "./OptionsDropdown";
+import CloseIcon from '@mui/icons-material/Close';
 
 function CreateArea(props) {
   const [isExpanded, setExpanded] = useState(false);
+  const [optionsState, setOptionsState] = useState(false);
 
   const [createNote] = useMutation(ADD_NOTE, {
     refetchQueries: [{ query: GET_NOTES }],
@@ -64,7 +68,10 @@ function CreateArea(props) {
 
   return (
     <div className="px-2 md:px-[150px] pt-[50px] relative w-full h-[40%] flex justify-start z-0">
-      <form className="create-note flex flex-col border border-gray-300 h-fit p-5 rounded-md lg:w-[40%] w-[80%] mx-auto">
+      <form className="create-note relative flex flex-col border border-gray-300 h-fit p-5 rounded-md lg:w-[40%] w-[80%] mx-auto">
+      {isExpanded && !optionsState && <MoreVertIcon onClick={()=>{setOptionsState(true)}} className="absolute top-3 right-3 cursor-pointer text-gray-300 " />}
+      {isExpanded && optionsState && <CloseIcon onClick={()=>{setOptionsState(false)}} className="absolute top-3 right-3 cursor-pointer text-gray-300 " />}
+      {optionsState && <OptionsDropdown/>}
         {isExpanded && (
           <input
             className="input focus:border-none focus:outline-none p-2 font-display"
