@@ -9,7 +9,7 @@ function Header({dropDown,setDropdown}) {
   const {register,handleSubmit,formState:{errors}}=useForm()
   const [isClicked,setClicked]=useState(false)
 
-  const onsSubmit=(data)=>{
+  const onSubmit=(data)=>{
     console.log(data)
   }
 
@@ -28,8 +28,9 @@ function Header({dropDown,setDropdown}) {
         Keeper
       </h1>
       <SearchIcon onClick={handleSearchBar} className="text-white cursor-pointer ml-3 translate-y-2" size={50} />
-        {isClicked && <form onSubmit={handleSubmit(onsubmit)} className='ml-2 translate-y-2 transition-all duration-1000 ease-in visible '>
-          <input type="text" {...register('search')} className="bg-transparent border border-white text-white placeholder:text-white rounded-xl px-3 focus:outline-none focus:ring-0" placeholder="Search..." />
+        {isClicked && <form className='ml-2 translate-y-2 transition-all duration-1000 ease-in visible '>
+          <input type="text" {...register('search')} onKeyDown={(e)=>{if(e.key==='Enter'){handleSubmit(onSubmit)()}}} className="bg-transparent border border-white text-white placeholder:text-white rounded-xl px-3 focus:outline-none focus:ring-0" placeholder="Search..." />
+          <button type="submit" className="hidden">Submit</button>
         </form>}
       </div>
       
