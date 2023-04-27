@@ -6,8 +6,11 @@ import { Popover } from 'react-tiny-popover';
 import { useMutation } from '@apollo/client'
 import { LOGIN_USER } from '../../mutations/userMutations';
 import { toast } from 'react-hot-toast';
+import { FcGoogle } from 'react-icons/fc'
+import { FaFacebookSquare } from 'react-icons/fa'
+import { BsGithub } from 'react-icons/bs'
 
-const LoginModel = ({ setLoginModel, setLoggedIn,setRegistrationModel }) => {
+const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel }) => {
 
     const [loginUser] = useMutation(LOGIN_USER);
 
@@ -20,24 +23,36 @@ const LoginModel = ({ setLoginModel, setLoggedIn,setRegistrationModel }) => {
 
     const onSubmit = (data) => {
         // console.log(data)
-        loginUser({ variables: {email: data.email, password: data.password } }).then((res)=>{
+        loginUser({ variables: { email: data.email, password: data.password } }).then((res) => {
             console.log(res.data.login)
             toast.success('Login Successful')
             // localStorage.setItem('username',res.data.login.username)
-            localStorage.setItem('token',res.data.login.token)
-            localStorage.setItem('isLoggedIn',true)
+            localStorage.setItem('token', res.data.login.token)
+            localStorage.setItem('isLoggedIn', true)
             setLoggedIn(true)
             handleClose()
-        }).catch((err)=>{
+        }).catch((err) => {
             console.log(err)
             toast.error('Login Failed')
         })
         reset();
     }
 
-    const handleRegister=()=>{
+    const handleRegister = () => {
         setLoginModel(false)
         setRegistrationModel(true)
+    }
+
+    const handleGoogleLogin = () => {
+
+    }
+
+    const handleFacebookLogin = () => {
+
+    }
+
+    const handleGithubLogin = () => {
+
     }
     return (
         <>
@@ -72,6 +87,22 @@ const LoginModel = ({ setLoginModel, setLoggedIn,setRegistrationModel }) => {
                                     <a href="#" className="text-sm text-blue-700 hover:underline">Lost Password?</a>
                                 </div>
                                 <button type="submit" className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">Login to your account</button>
+                                <div>
+                                    <p className='text-center'>or</p>
+                                </div>
+                                <div className='flex flex-row justify-center items-center space-x-10 -translate-y-2'>
+                                    <div onClick={handleGoogleLogin} className='border border-gray-300 rounded-full p-2'>
+                                        <FcGoogle size={30} />
+                                    </div>
+                                    <div onClick={handleFacebookLogin} className='border border-gray-300 rounded-full p-2'>
+                                        <FaFacebookSquare size={30} />
+
+                                    </div>
+                                    <div onClick={handleGithubLogin} className='border border-gray-300 rounded-full p-2'>
+                                        <BsGithub size={30} />
+
+                                    </div>
+                                </div>
                                 <div className="text-sm font-medium text-gray-500 ">
                                     Not registered? <a onClick={handleRegister} href="#" className="text-blue-700 hover:underline">Create account</a>
                                 </div>
