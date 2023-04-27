@@ -6,9 +6,13 @@ import { Popover } from 'react-tiny-popover';
 import { useMutation } from '@apollo/client'
 import { LOGIN_USER } from '../../mutations/userMutations';
 import { toast } from 'react-hot-toast';
-import { FcGoogle } from 'react-icons/fc'
+import FacebookLogin from 'react-facebook-login';
+import GithubLogin from 'react-github-login';
 import { FaFacebookSquare } from 'react-icons/fa'
 import { BsGithub } from 'react-icons/bs'
+import { FcGoogle } from 'react-icons/fc'
+import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
+
 
 const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel }) => {
 
@@ -43,17 +47,36 @@ const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel }) => {
         setRegistrationModel(true)
     }
 
-    const handleGoogleLogin = () => {
+    const googleLogin = useGoogleLogin({
+        onSuccess: response => {
+            fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+                headers: {
+                    Authorization: `Bearer ${response.access_token}`,
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    // use the user data as needed
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        },
+        onFailure: response => console.log(response),
+        clientId: 'GOOGLE_CLIENT_ID',
+        // ...other props
+    });
 
-    }
+    const handleFacebookLogin = (response) => {
+        // Handle Facebook sign-in
+        console.log('facebook');
+    };
 
-    const handleFacebookLogin = () => {
-
-    }
-
-    const handleGithubLogin = () => {
-
-    }
+    const handleGithubLogin = (response) => {
+        // Handle Github sign-in
+        console.log('github');
+    };
     return (
         <>
             <div id="defaultModal" tabIndex="-1" aria-hidden="true" className="fixed pt-5 md:pt-52 px-5 md:px-[35%] right-0 z-9999 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full backdrop-blur-sm">
@@ -90,6 +113,7 @@ const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel }) => {
                                 <div>
                                     <p className='text-center'>or</p>
                                 </div>
+                                {/* 
                                 <div className='flex flex-row justify-center items-center space-x-10 -translate-y-2'>
                                     <div onClick={handleGoogleLogin} className='border border-gray-300 rounded-full p-2'>
                                         <FcGoogle size={30} />
@@ -100,6 +124,34 @@ const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel }) => {
                                     </div>
                                     <div onClick={handleGithubLogin} className='border border-gray-300 rounded-full p-2'>
                                         <BsGithub size={30} />
+
+                                    </div>
+                                </div> */}
+                                <div className='flex flex-row justify-center items-center space-x-10 -translate-y-2'>
+                                    <div className='border border-gray-300 rounded-full p-3'>
+                                        <FcGoogle size={30} onClick={() => googleLogin()} />
+                                    </div>
+                                    <div className='border border-gray-300 rounded-full p-2'>
+                                        <FacebookLogin
+                                            appId="<your-facebook-app-id>"
+                                            fields="name,email,picture"
+                                            callback={handleFacebookLogin}
+                                            icon={<FaFacebookSquare size={30} />}
+                                            textButton=""
+                                            cssClass='h-10 w-10 rounded-full items-center justify-center flex'
+                                        />
+
+                                    </div>
+                                    <div className='border border-gray-300 rounded-full p-2'>
+                                        <GithubLogin
+                                            clientId="<your-github-client-id>"
+                                            redirectUri="<your-github-redirect-uri>"
+                                            onSuccess={handleGithubLogin}
+                                            onFailure={handleGithubLogin}
+                                            buttonText={<BsGithub size={30} />}
+                                            aria-label=""
+                                            className='h-10 w-10 rounded-full items-center justify-center flex'
+                                        />
 
                                     </div>
                                 </div>
