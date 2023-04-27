@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import App from "./App"
 import './index.css'
 import { ApolloClient, InMemoryCache,ApolloProvider,createHttpLink } from '@apollo/client';
@@ -32,10 +32,11 @@ const client = new ApolloClient({
   cache: new InMemoryCache()
 });
 
-
 const root = ReactDOM.createRoot(document.getElementById("root"))
 root.render(
+  <GoogleOAuthProvider clientId='110291498666-7oq1hes91n5r5sggu2ab9rt54lrrkb5r.apps.googleusercontent.com'>
   <ApolloProvider client={client}>
     <App />
   </ApolloProvider>
+  </GoogleOAuthProvider>
 )
