@@ -44,6 +44,7 @@ function Note(props) {
         }
       ]
     });
+    
   }
 
   const noteHandle=()=>{
