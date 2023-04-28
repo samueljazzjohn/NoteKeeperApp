@@ -84,6 +84,7 @@ const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel }) => {
     const handleFacebookLogin = (response) => {
         // Handle Facebook sign-in
         console.log('facebook');
+        console.log(response)
     };
 
     const handleGithubLogin = (response) => {
@@ -146,7 +147,7 @@ const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel }) => {
                                     </div>
                                     <div className='border border-gray-300 rounded-full p-2'>
                                         <FacebookLogin
-                                            appId="<your-facebook-app-id>"
+                                            appId="786061892882373"
                                             fields="name,email,picture"
                                             callback={handleFacebookLogin}
                                             icon={<FaFacebookSquare size={30} />}
