@@ -4,14 +4,37 @@ import {FaUserCircle} from 'react-icons/fa'
 import SearchIcon from '@mui/icons-material/Search';
 import {useForm} from 'react-hook-form'
 import LoginIcon from '@mui/icons-material/Login';
+import { useMutation } from "@apollo/client";
+import { SEARCH_NOTE } from "../mutations/noteMutations";
 
-function Header({dropDown,setDropdown}) {
+function Header({dropDown,setDropdown,setNote}) {
+
+  const [searchNote] = useMutation(SEARCH_NOTE,{
+    context: {
+      headers: {
+        "authorization": `Bearer ${localStorage.getItem("token")}`,
+        },
+        },
+        onCompleted: (data) => {
+          console.log(data);
+        },
+        onError: (error) => {
+          console.log(error);
+        },
+    }
+  );
 
   const {register,handleSubmit,formState:{errors}}=useForm()
   const [isClicked,setClicked]=useState(false)
 
   const onSubmit=(data)=>{
     console.log(data)
+    searchNote({variables:{search:data.search}}).then((response)=>{
+      console.log(response)
+      setNote(response.data.searchNote)
+    }).catch((err)=>{
+      console.log(err)
+    })
   }
 
   const handleDropdown=()=>{
@@ -21,6 +44,7 @@ function Header({dropDown,setDropdown}) {
   const handleSearchBar=()=>{
     setClicked(true)
   }
+
   return (
     <header className="sticky top-0 h-[10%] md:h-[8%] bg-[#f5ba13] flex flex-row justify-between items-center px-10 z-20">
       <div className="flex flex-row">
@@ -29,9 +53,9 @@ function Header({dropDown,setDropdown}) {
         Keeper
       </h1>
       <SearchIcon onClick={handleSearchBar} className="text-white cursor-pointer ml-3 translate-y-2" size={50} />
-        {isClicked && <form className='ml-2 translate-y-2 transition-all duration-1000 ease-in visible '>
-          <input type="text" {...register('search')} onKeyDown={(e)=>{if(e.key==='Enter'){handleSubmit(onSubmit)()}}} className="bg-transparent border border-white text-white placeholder:text-white rounded-xl px-3 focus:outline-none focus:ring-0" placeholder="Search..." />
-          <button type="submit" className="hidden">Submit</button>
+        {isClicked && <form onSubmit={handleSubmit(onSubmit)} className='ml-2 translate-y-2 transition-all duration-1000 ease-in visible '>
+        <input type="text" {...register('search')} className="bg-transparent border border-white text-white font-display placeholder:text-white rounded-xl px-3 focus:outline-none focus:ring-0" placeholder="Search..." />
+
         </form>}
       </div>
       

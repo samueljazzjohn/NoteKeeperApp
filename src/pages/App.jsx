@@ -90,7 +90,7 @@ function App() {
   return (
     <>
       <div className="h-screen w-full justify-between">
-        <Header dropDown={dropDown} setDropdown={setDropdown} />
+        <Header dropDown={dropDown} setDropdown={setDropdown} setNote={setNotes} />
         <CreateArea onAdd={addNote} />
         {loginModel && <LoginModel className='z-999' setLoginModel={setLoginModel} setRegistrationModel={setRegistrationModel} setLoggedIn={setLoggedIn} />}
         {registrationModel && <RegistrationModel className='z-99999' setRegistrationModel={setRegistrationModel} setLoginModel={setLoginModel} />}
