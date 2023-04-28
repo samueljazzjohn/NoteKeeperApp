@@ -36,7 +36,7 @@ function Header({dropDown,setDropdown}) {
       </div>
       
       <div className="flex flex-row justify-center items-center space-x-3">
-        <h2 className="text-white text-[15px] font-semibold">{localStorage.getItem('isLoggedIn')&&localStorage.getItem('username')}</h2>
+      {localStorage.getItem('isLoggedIn')&&<h2 className="text-white text-[15px] font-semibold">{`${(localStorage.getItem('user'))}`}</h2>}
         {localStorage.getItem('isLoggedIn')?<FaUserCircle onClick={handleDropdown} id="dropdownDefaultButton" data-dropdown-toggle="dropdown" className="text-white cursor-pointer" size={25} />:
          <LoginIcon onClick={handleDropdown} id="dropdownDefaultButton" data-dropdown-toggle="dropdown" className="text-white cursor-pointer" size={25} />}
       
