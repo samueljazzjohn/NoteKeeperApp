@@ -12,9 +12,12 @@ import { FaFacebookSquare } from 'react-icons/fa'
 import { BsGithub } from 'react-icons/bs'
 import { FcGoogle } from 'react-icons/fc'
 import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
+import { useNavigate } from 'react-router-dom';
 
 
 const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel }) => {
+
+    const navigate =useNavigate()
 
     const [loginUser] = useMutation(LOGIN_USER);
     const [loginGoogle] = useMutation(GOOGLE_LOGIN);
@@ -28,13 +31,13 @@ const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel }) => {
     }
 
     const onSubmit = (data) => {
-        // console.log(data)
         loginUser({ variables: { email: data.email, password: data.password } }).then((res) => {
             console.log(res.data.login)
             toast.success('Login Successful')
-            // localStorage.setItem('username',res.data.login.username)
             localStorage.setItem('token', res.data.login.token)
             localStorage.setItem('isLoggedIn', true)
+            localStorage.setItem('user', res.data.login.user.username)
+            navigate('/home')
             setLoggedIn(true)
             handleClose()
         }).catch((err) => {
@@ -62,9 +65,10 @@ const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel }) => {
                     loginGoogle({ variables: { email: data.email, username: data.given_name } }).then((res) => {
                         console.log(res.data.loginGoogle)
                         toast.success('Login Successful')
-                        // localStorage.setItem('username',res.data.login.username)
                         localStorage.setItem('token', res.data.loginGoogle.token)
                         localStorage.setItem('isLoggedIn', true)
+                        localStorage.setItem('user', res.data.loginGoogle.user.username)
+                        navigate(`/home`)
                         setLoggedIn(true)
                         handleClose()
                     }).catch((err) => {
@@ -86,7 +90,7 @@ const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel }) => {
         loginFacebook({ variables: { email: response.email, username: response.name } }).then((res) => {
             console.log(res.data.loginFacebook)
             toast.success('Login Successful')
-            // localStorage.setItem('username',res.data.login.username)
+            localStorage.setItem('user', res.data.login.user.username)
             localStorage.setItem('token', res.data.loginFacebook.token)
             localStorage.setItem('isLoggedIn', true)
             setLoggedIn(true)
@@ -103,6 +107,7 @@ const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel }) => {
         } else {
             // Handle Github sign-in
             fetch("https://github.com/login/oauth/access_token", {
+                mode: "cors",
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -185,7 +190,7 @@ const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel }) => {
                                     <div className='border border-gray-300 rounded-full p-2'>
                                         <GithubLogin
                                             clientId="6c74ad4eebe76f8e5549"
-                                            redirectUri="https://note-keeper-app-samueljazzjohn.vercel.app/"
+                                            redirectUri="http://localhost:3000"
                                             onSuccess={handleGithubLogin}
                                             onFailure={handleGithubLogin}
                                             buttonText={<BsGithub size={30} />}
