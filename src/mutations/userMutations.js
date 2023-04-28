@@ -4,6 +4,10 @@ import { Parser } from "graphql/language/parser";
 const LOGIN_USER = gql`
     mutation loginUser($email: String!, $password: String!) {
         login(email: $email, password: $password) {
+            user {
+                username,
+                email
+            },  
             token
         }
     }
@@ -12,6 +16,10 @@ const LOGIN_USER = gql`
 const GOOGLE_LOGIN  = gql`
     mutation googleLogin($email: String!,$username: String!) {
         loginGoogle(email: $email,username: $username) {
+            user{
+                username,
+                email
+            },
             token
         }
     }
@@ -20,6 +28,22 @@ const GOOGLE_LOGIN  = gql`
 const FACEBOOK_LOGIN  = gql`
     mutation facebookLogin($email: String!,$username: String!) {
         loginFacebook(email: $email,username: $username) {
+            user{
+                username,
+                email
+            },
+            token
+        }
+    }
+`;
+
+const GITHUB_LOGIN  = gql`
+    mutation facebookLogin($email: String!,$username: String!) {
+        loginFacebook(email: $email,username: $username) {
+            user{
+                username,
+                email
+            },
             token
         }
     }
@@ -33,4 +57,4 @@ const REGISTER_USER = gql`
     }
 `;
 
-export { REGISTER_USER, LOGIN_USER, GOOGLE_LOGIN ,FACEBOOK_LOGIN}
+export { REGISTER_USER, LOGIN_USER, GOOGLE_LOGIN ,FACEBOOK_LOGIN,GITHUB_LOGIN}
