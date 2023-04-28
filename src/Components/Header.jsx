@@ -3,6 +3,7 @@ import HighlightIcon from '@mui/icons-material/Highlight';
 import {FaUserCircle} from 'react-icons/fa'
 import SearchIcon from '@mui/icons-material/Search';
 import {useForm} from 'react-hook-form'
+import LoginIcon from '@mui/icons-material/Login';
 
 function Header({dropDown,setDropdown}) {
 
@@ -36,7 +37,9 @@ function Header({dropDown,setDropdown}) {
       
       <div className="flex flex-row justify-center items-center space-x-3">
         <h2 className="text-white text-[15px] font-semibold">{localStorage.getItem('isLoggedIn')&&localStorage.getItem('username')}</h2>
-      <FaUserCircle onClick={handleDropdown} id="dropdownDefaultButton" data-dropdown-toggle="dropdown" className="text-white cursor-pointer" size={25} />
+        {localStorage.getItem('isLoggedIn')?<FaUserCircle onClick={handleDropdown} id="dropdownDefaultButton" data-dropdown-toggle="dropdown" className="text-white cursor-pointer" size={25} />:
+         <LoginIcon onClick={handleDropdown} id="dropdownDefaultButton" data-dropdown-toggle="dropdown" className="text-white cursor-pointer" size={25} />}
+      
         </div>
     </header>
   );
