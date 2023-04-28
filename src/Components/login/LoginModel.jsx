@@ -4,7 +4,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Popover } from 'react-tiny-popover';
 import { useMutation } from '@apollo/client'
-import { LOGIN_USER,GOOGLE_LOGIN,FACEBOOK_LOGIN } from '../../mutations/userMutations';
+import { LOGIN_USER, GOOGLE_LOGIN, FACEBOOK_LOGIN } from '../../mutations/userMutations';
 import { toast } from 'react-hot-toast';
 import FacebookLogin from 'react-facebook-login';
 import GithubLogin from 'react-github-login';
@@ -59,7 +59,7 @@ const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel }) => {
                 .then(response => response.json())
                 .then(data => {
                     console.log(data);
-                    loginGoogle({ variables: { email: data.email, username:data.given_name } }).then((res) => {
+                    loginGoogle({ variables: { email: data.email, username: data.given_name } }).then((res) => {
                         console.log(res.data.loginGoogle)
                         toast.success('Login Successful')
                         // localStorage.setItem('username',res.data.login.username)
@@ -70,7 +70,7 @@ const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel }) => {
                     }).catch((err) => {
                         console.log(err.message)
                         toast.error('Login Failed')
-                    }   )
+                    })
 
                 })
                 .catch(error => {
@@ -94,16 +94,40 @@ const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel }) => {
         }).catch((err) => {
             console.log(err.message)
             toast.error('Login Failed')
-        }   )
+        })
     };
 
     const handleGithubLogin = (response) => {
-        if(response=='The popup was closed'){
+        if (response.error == 'The popup was closed') {
             toast.error('Login Failed')
-        }else{
-        // Handle Github sign-in
-        console.log('github');
-        console.log(response);
+        } else {
+            // Handle Github sign-in
+            fetch("https://github.com/login/oauth/access_token", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+                body: JSON.stringify({
+                    client_id: "6c74ad4eebe76f8e5549",
+                    client_secret: "a7016c963d6c53cc52f572fd9b541fd707c24af0",
+                    code: response.code,
+                }),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    const access_token = data.access_token;
+                    fetch("https://api.github.com/user", {
+                        headers: {
+                            Authorization: `Bearer ${access_token}`,
+                        },
+                    })
+                        .then((response) => response.json())
+                        .then((data) => {
+                            console.log(data);
+                            // handle user data
+                        });
+                });
         }
 
     };
@@ -143,20 +167,6 @@ const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel }) => {
                                 <div>
                                     <p className='text-center'>or</p>
                                 </div>
-                                {/* 
-                                <div className='flex flex-row justify-center items-center space-x-10 -translate-y-2'>
-                                    <div onClick={handleGoogleLogin} className='border border-gray-300 rounded-full p-2'>
-                                        <FcGoogle size={30} />
-                                    </div>
-                                    <div onClick={handleFacebookLogin} className='border border-gray-300 rounded-full p-2'>
-                                        <FaFacebookSquare size={30} />
-
-                                    </div>
-                                    <div onClick={handleGithubLogin} className='border border-gray-300 rounded-full p-2'>
-                                        <BsGithub size={30} />
-
-                                    </div>
-                                </div> */}
                                 <div className='flex flex-row justify-center items-center space-x-10 -translate-y-2'>
                                     <div className='border border-gray-300 rounded-full p-3'>
                                         <FcGoogle size={30} onClick={() => googleLogin()} />
@@ -175,7 +185,7 @@ const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel }) => {
                                     <div className='border border-gray-300 rounded-full p-2'>
                                         <GithubLogin
                                             clientId="6c74ad4eebe76f8e5549"
-                                            redirectUri="http://localhost:3000/login/github"
+                                            redirectUri="https://note-keeper-app-samueljazzjohn.vercel.app/"
                                             onSuccess={handleGithubLogin}
                                             onFailure={handleGithubLogin}
                                             buttonText={<BsGithub size={30} />}
