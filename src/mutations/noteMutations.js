@@ -31,4 +31,13 @@ const UPDATE_NOTE = gql`
     }
 `;
 
-export { ADD_NOTE,DELETE_NOTE,UPDATE_NOTE }
+const SEARCH_NOTE = gql`
+    mutation searchNote($search: String!) {
+        searchNote(search: $search) {
+            title,
+            description
+        }
+    }
+`;
+
+export { ADD_NOTE,DELETE_NOTE,UPDATE_NOTE,SEARCH_NOTE }
