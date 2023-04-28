@@ -4,7 +4,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Popover } from 'react-tiny-popover';
 import { useMutation } from '@apollo/client'
-import { LOGIN_USER,GOOGLE_LOGIN } from '../../mutations/userMutations';
+import { LOGIN_USER,GOOGLE_LOGIN,FACEBOOK_LOGIN } from '../../mutations/userMutations';
 import { toast } from 'react-hot-toast';
 import FacebookLogin from 'react-facebook-login';
 import GithubLogin from 'react-github-login';
@@ -18,6 +18,7 @@ const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel }) => {
 
     const [loginUser] = useMutation(LOGIN_USER);
     const [loginGoogle] = useMutation(GOOGLE_LOGIN);
+    const [loginFacebook] = useMutation(FACEBOOK_LOGIN);
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm({ resolver: yupResolver(schema) })
 
@@ -82,9 +83,18 @@ const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel }) => {
     });
 
     const handleFacebookLogin = (response) => {
-        // Handle Facebook sign-in
-        console.log('facebook');
-        console.log(response)
+        loginFacebook({ variables: { email: response.email, username: response.name } }).then((res) => {
+            console.log(res.data.loginFacebook)
+            toast.success('Login Successful')
+            // localStorage.setItem('username',res.data.login.username)
+            localStorage.setItem('token', res.data.loginFacebook.token)
+            localStorage.setItem('isLoggedIn', true)
+            setLoggedIn(true)
+            handleClose()
+        }).catch((err) => {
+            console.log(err.message)
+            toast.error('Login Failed')
+        }   )
     };
 
     const handleGithubLogin = (response) => {
