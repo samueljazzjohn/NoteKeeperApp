@@ -4,7 +4,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Popover } from 'react-tiny-popover';
 import { useMutation } from '@apollo/client'
-import { LOGIN_USER } from '../../mutations/userMutations';
+import { LOGIN_USER,GOOGLE_LOGIN } from '../../mutations/userMutations';
 import { toast } from 'react-hot-toast';
 import FacebookLogin from 'react-facebook-login';
 import GithubLogin from 'react-github-login';
@@ -17,6 +17,7 @@ import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel }) => {
 
     const [loginUser] = useMutation(LOGIN_USER);
+    const [loginGoogle] = useMutation(GOOGLE_LOGIN);
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm({ resolver: yupResolver(schema) })
 
@@ -57,10 +58,22 @@ const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel }) => {
                 .then(response => response.json())
                 .then(data => {
                     console.log(data);
-                    // use the user data as needed
+                    loginGoogle({ variables: { email: data.email, username:data.given_name } }).then((res) => {
+                        console.log(res.data.loginGoogle)
+                        toast.success('Login Successful')
+                        // localStorage.setItem('username',res.data.login.username)
+                        localStorage.setItem('token', res.data.loginGoogle.token)
+                        localStorage.setItem('isLoggedIn', true)
+                        setLoggedIn(true)
+                        handleClose()
+                    }).catch((err) => {
+                        console.log(err.message)
+                        toast.error('Login Failed')
+                    }   )
+
                 })
                 .catch(error => {
-                    console.error(error);
+                    console.error(error.message);
                 });
         },
         onFailure: response => console.log(response),
