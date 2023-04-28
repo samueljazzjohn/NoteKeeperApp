@@ -17,6 +17,14 @@ const GOOGLE_LOGIN  = gql`
     }
 `;
 
+const FACEBOOK_LOGIN  = gql`
+    mutation facebookLogin($email: String!,$username: String!) {
+        loginFacebook(email: $email,username: $username) {
+            token
+        }
+    }
+`;
+
 const REGISTER_USER = gql`
     mutation registerUser($username: String!, $email: String!, $password: String!) {
         addUser(username: $username, email: $email, password: $password) {
@@ -25,4 +33,4 @@ const REGISTER_USER = gql`
     }
 `;
 
-export { REGISTER_USER, LOGIN_USER, GOOGLE_LOGIN }
+export { REGISTER_USER, LOGIN_USER, GOOGLE_LOGIN ,FACEBOOK_LOGIN}
