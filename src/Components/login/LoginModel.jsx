@@ -98,8 +98,14 @@ const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel }) => {
     };
 
     const handleGithubLogin = (response) => {
+        if(response=='The popup was closed'){
+            toast.error('Login Failed')
+        }else{
         // Handle Github sign-in
         console.log('github');
+        console.log(response);
+        }
+
     };
     return (
         <>
@@ -168,8 +174,8 @@ const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel }) => {
                                     </div>
                                     <div className='border border-gray-300 rounded-full p-2'>
                                         <GithubLogin
-                                            clientId="<your-github-client-id>"
-                                            redirectUri="<your-github-redirect-uri>"
+                                            clientId="6c74ad4eebe76f8e5549"
+                                            redirectUri="http://localhost:3000/login/github"
                                             onSuccess={handleGithubLogin}
                                             onFailure={handleGithubLogin}
                                             buttonText={<BsGithub size={30} />}
