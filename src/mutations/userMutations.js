@@ -57,4 +57,20 @@ const REGISTER_USER = gql`
     }
 `;
 
-export { REGISTER_USER, LOGIN_USER, GOOGLE_LOGIN ,FACEBOOK_LOGIN,GITHUB_LOGIN}
+const FORGET_PASSWORD = gql`
+    mutation forgetPassword($email:String!){
+        forgetPassword(email:$email){
+            status
+        }
+    }
+`
+
+const RESET_PASSWORD = gql`
+    mutation resetPassword($password:String!, $token:String!){
+        resetPassword(password:$password,token:$token){
+            status
+        }
+    }
+`
+
+export { REGISTER_USER, LOGIN_USER, GOOGLE_LOGIN ,FACEBOOK_LOGIN,GITHUB_LOGIN,RESET_PASSWORD,FORGET_PASSWORD}
