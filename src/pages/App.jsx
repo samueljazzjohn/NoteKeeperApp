@@ -12,6 +12,7 @@ import RegistrationModel from "../Components/registration/RegistrationModel";
 import NoteModel from "../Components/note/NoteModel";
 import WithAuth from "../auth/WithAuth";
 import { useNavigate } from "react-router-dom";
+import ForgetPasswordModel from "../Components/login/ForgetPasswordModel";
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
   const [noteModel, setNoteModel] = React.useState(false)
   const [offset, setOffset] = useState(0)
   const navigate = useNavigate()
+  const [forgetModel,setForgetModel]=useState(false)
 
   const ref = useRef()
 
@@ -92,7 +94,8 @@ function App() {
       <div className="h-screen w-full justify-between">
         <Header dropDown={dropDown} setDropdown={setDropdown} setNote={setNotes} />
         <CreateArea onAdd={addNote} />
-        {loginModel && <LoginModel className='z-999' setLoginModel={setLoginModel} setRegistrationModel={setRegistrationModel} setLoggedIn={setLoggedIn} />}
+        {forgetModel && <ForgetPasswordModel className='z-999' setForgetModel={setForgetModel} />}
+        {loginModel && <LoginModel className='z-999' setLoginModel={setLoginModel} setRegistrationModel={setRegistrationModel} setLoggedIn={setLoggedIn} setForgetModel={setForgetModel}/>}
         {registrationModel && <RegistrationModel className='z-99999' setRegistrationModel={setRegistrationModel} setLoginModel={setLoginModel} />}
         <DropdownMenu refvar={ref} DropdownStatus={dropDown} loggedIn={loggedIn} setLoginModel={setLoginModel} setLoggedIn={setLoggedIn} />
         <div className="z-10 grid grid-cols-3 gap-5 justify-center overflow-x-scroll px-[150px] py-[50px] shrink-0" onScroll={handleScroll}>
