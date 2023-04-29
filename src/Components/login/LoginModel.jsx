@@ -15,7 +15,7 @@ import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
 
 
-const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel }) => {
+const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel,setForgetModel }) => {
 
     const navigate =useNavigate()
 
@@ -28,6 +28,11 @@ const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel }) => {
     const handleClose = () => {
         setLoginModel(false)
         document.body.style.overflow = 'auto';
+    }
+
+    const handleResetPassword = () => {
+        setLoginModel(false)
+        setForgetModel(true)
     }
 
     const onSubmit = (data) => {
@@ -166,7 +171,7 @@ const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel }) => {
                                         </div>
                                         <label for="remember" className="ml-2 text-sm font-medium text-gray-900 ">Remember me</label>
                                     </div>
-                                    <a href="#" className="text-sm text-blue-700 hover:underline">Lost Password?</a>
+                                    <a onClick={handleResetPassword} href="#" className="text-sm text-blue-700 hover:underline">Forgot Password?</a>
                                 </div>
                                 <button type="submit" className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">Login to your account</button>
                                 <div>
