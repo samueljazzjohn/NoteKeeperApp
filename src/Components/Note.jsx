@@ -55,7 +55,7 @@ function Note(props) {
   }
 
   return (
-    <div className="p-5 border border-gray-300 rounded-md w-27% cursor-pointer" onClick={noteHandle}>
+    <div className="p-5 border border-gray-300 rounded-md w-full md:w-27% cursor-pointer" onClick={noteHandle}>
       <h1 className="font-display uppercase" >{props.title}</h1>
       <p className="font-display first-letter:uppercase">{props.description}</p>
       <div className="flex flex-row-reverse">
