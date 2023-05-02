@@ -93,7 +93,7 @@ function App() {
 
   return (
     <>
-      <div className="h-screen w-full justify-between">
+      <div className="h-screen w-full justify-between flex flex-col ">
       {isLoading && <LoadingScreen/>}
         <Header dropDown={dropDown} setDropdown={setDropdown} setNote={setNotes} />
         <CreateArea onAdd={addNote} />
@@ -101,7 +101,7 @@ function App() {
         {loginModel && <LoginModel className='z-999' setLoginModel={setLoginModel} setRegistrationModel={setRegistrationModel} setLoggedIn={setLoggedIn} setForgetModel={setForgetModel} setLoading={setLoading}/>}
         {registrationModel && <RegistrationModel className='z-99999' setRegistrationModel={setRegistrationModel} setLoginModel={setLoginModel} />}
         <DropdownMenu refvar={ref} DropdownStatus={dropDown} loggedIn={loggedIn} setLoginModel={setLoginModel} setLoggedIn={setLoggedIn} />
-        <div className="z-10 grid grid-cols-3 gap-5 justify-center overflow-x-scroll px-[150px] py-[50px] shrink-0" onScroll={handleScroll}>
+        <div className="z-10  md:grid grid-cols-1 md:grid-cols-3 gap-5 justify-center overflow-x-scroll px-[20px] mb-[60px] md:px-[150px] py-[10px] md:py-[50px] shrink-0" onScroll={handleScroll}>
           {notes.map((noteItem, index) => {
             return (
               <Note
