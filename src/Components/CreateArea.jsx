@@ -95,8 +95,8 @@ function CreateArea(props) {
   }
 
   return (
-    <div className="px-2 md:px-[150px] pt-[50px] relative w-full h-[40%] flex justify-start z-0">
-      <form className="create-note relative flex flex-col border border-gray-300 h-fit p-5 rounded-md lg:w-[40%] w-[80%] mx-auto">
+    <div className="px-2 md:px-[150px] pt-5 md:pt-[50px] relative w-full h-[40%] flex justify-start z-0">
+      <form className="create-note relative flex flex-col border border-gray-300 h-fit p-5 rounded-md w-full md:w-[40%] w-[80%] mx-auto">
       {isExpanded && !optionsState && <MoreVertIcon onClick={()=>{setOptionsState(true)}} className="absolute top-3 right-3 cursor-pointer text-gray-300 " />}
       {isExpanded && optionsState && <CloseIcon onClick={()=>{setOptionsState(false)}} className="absolute top-3 right-3 cursor-pointer text-gray-300 " />}
       {optionsState && <OptionsDropdown toggleListing={toggleListing} setOptionsState={setOptionsState}/>}
@@ -122,7 +122,7 @@ function CreateArea(props) {
           rows={isExpanded ? 5 : 1}
         />
 
-         {isExpanded ? <div onClick={submitNote} className="h-10 w-10 bg-[#f5ba13] rounded-full translate-x-[380px] translate-y-10 flex justify-center items-center cursor-pointer">
+         {isExpanded ? <div onClick={submitNote} className="h-10 w-10 bg-[#f5ba13] rounded-full translate-x-[220px] md:translate-x-[380px] translate-y-10 flex justify-center items-center cursor-pointer">
           <AddIcon className="text-white"/>
         </div>: <></>} 
       </form>
