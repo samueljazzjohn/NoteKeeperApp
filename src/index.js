@@ -9,7 +9,7 @@ import { RouterProvider } from 'react-router-dom'
 import routes from './routes'
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:4000/graphql',
+  uri: 'http://localhost:5001/graphql',
 });
 
 const authLink = setContext((_, { headers }) => {
