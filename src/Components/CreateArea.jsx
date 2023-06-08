@@ -121,10 +121,11 @@ function CreateArea(props) {
           placeholder="Take a note..."
           rows={isExpanded ? 5 : 1}
         />
-
-         {isExpanded ? <div onClick={submitNote} className="h-10 w-10 bg-[#f5ba13] rounded-full translate-x-[220px] md:translate-x-[380px] translate-y-10 flex justify-center items-center cursor-pointer">
+        <div className="flex w-full flex-row justify-end">
+         {isExpanded ? <div onClick={submitNote} className="h-10 w-10 bg-[#f5ba13] rounded-full translate-y-10 flex justify-center items-center cursor-pointer">
           <AddIcon className="text-white"/>
         </div>: <></>} 
+        </div>
       </form>
     </div>
   );
