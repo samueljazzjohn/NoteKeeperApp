@@ -145,6 +145,8 @@ const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel,setForget
         }
 
     };
+
+
     return (
         <>
             <div id="defaultModal" tabIndex="-1" aria-hidden="true" className="fixed pt-5 md:pt-52 px-5 md:px-[35%] right-0 z-9999 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full backdrop-blur-sm">
