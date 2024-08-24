@@ -4,9 +4,7 @@ WORKDIR '/app'
 
 COPY package.json .
 
-RUN yarn install --legacy-peer-deps
-
-RUN yarn build
+RUN yarn install
 
 COPY . .
 
