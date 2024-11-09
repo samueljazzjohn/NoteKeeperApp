@@ -1,7 +1,7 @@
 import React from "react";
 import { useMutation } from "@apollo/client";
-import { DELETE_NOTE } from "../mutations/noteMutations";
-import { GET_NOTES } from "../queries/noteQueries";
+import { DELETE_NOTE } from "../Services/Mutations/noteMutations";
+import { GET_NOTES } from "../Services/Queries/noteQueries";
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 

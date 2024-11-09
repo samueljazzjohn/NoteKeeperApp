@@ -4,15 +4,13 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
-import { RESET_PASSWORD } from '../mutations/userMutations';
+import { RESET_PASSWORD } from '../../Services/Mutations/userMutations';
 
 const ResetPassword = () => {
 
     const navigate = useNavigate()
-
     const [resetPassword] = useMutation(RESET_PASSWORD);
     const {token} = useParams();
-    console.log(token)
 
     const {register,handleSubmit,formState:{errors}}=useForm({resolver: yupResolver(schema)})
 
@@ -35,12 +33,12 @@ const ResetPassword = () => {
                     <h3 className="mb-4 text-xl font-bold text-gray-900 text-center ">Reset Password</h3>
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" action="#">
                         <div>
-                            <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">New Passowrd</label>
+                            <label  htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">New Passowrd</label>
                             <input {...register('password')} type="password" name="password" id="password" className="bg-gray-50 border border-gray-300 text-gray-900 focus:outline-none text-sm rounded-lg block w-full p-2.5 " placeholder="********" />
                             <p className={`text-sm bg-red-600 text-white opacity-80 ${errors.password && "p-1 mt-1 px-4"} rounded-md`}>{errors.password?.message}</p>
                         </div>
                         <div>
-                            <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">Confirm Passowrd</label>
+                            <label  htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">Confirm Passowrd</label>
                             <input {...register('confirmPassword')} type="password" name="confirmPassword" id="confirmPassword" className="bg-gray-50 border border-gray-300 text-gray-900 focus:outline-none text-sm rounded-lg block w-full p-2.5 " placeholder="********" />
                             <p className={`text-sm bg-red-600 text-white opacity-80 ${errors.confirmPassword && "p-1 mt-1 px-4"} rounded-md`}>{errors.confirmPassword?.message}</p>
                         </div>
@@ -52,11 +50,6 @@ const ResetPassword = () => {
     </div>
 </>
   )
-}
-
-const initialValues = {
-    password: '',
-    confirmPassword: '',
 }
 
 const schema = yup.object().shape({

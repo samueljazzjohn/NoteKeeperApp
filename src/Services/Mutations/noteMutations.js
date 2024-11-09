@@ -1,4 +1,4 @@
-import { gql, parser } from "@apollo/client";
+import { gql } from "@apollo/client";
 
 const ADD_NOTE = gql`
 
