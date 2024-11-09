@@ -1,5 +1,4 @@
-import { gql, parser } from "@apollo/client";
-import { Parser } from "graphql/language/parser";
+import { gql } from "@apollo/client";
 
 const LOGIN_USER = gql`
     mutation loginUser($email: String!, $password: String!) {
@@ -38,8 +37,8 @@ const FACEBOOK_LOGIN  = gql`
 `;
 
 const GITHUB_LOGIN  = gql`
-    mutation facebookLogin($email: String!,$username: String!) {
-        loginFacebook(email: $email,username: $username) {
+    mutation githubLogin($email: String!,$username: String!) {
+        loginGithub(email: $email,username: $username) {
             user{
                 username,
                 email

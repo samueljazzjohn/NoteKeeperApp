@@ -1,15 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import App from "./pages/App"
+import App from "./Pages/HomePage/App"
 import './index.css'
 import { ApolloClient, InMemoryCache,ApolloProvider,createHttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { RouterProvider } from 'react-router-dom'
 import routes from './routes'
+import getConfig from './Config/config';
+
+const {REACT_APP_GRAPHQL_URI, REACT_APP_GOOGLE_CLIENT_ID } = getConfig()
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:5001/graphql',
+  uri: REACT_APP_GRAPHQL_URI
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -24,11 +27,6 @@ const authLink = setContext((_, { headers }) => {
   }
 });
 
-// const client = new ApolloClient({
-//   uri: 'http://localhost:4000/graphql',
-//   cache: new InMemoryCache()
-// });
-
 const client = new ApolloClient({
   link: authLink.concat(httpLink),
   cache: new InMemoryCache()
@@ -36,7 +34,7 @@ const client = new ApolloClient({
 
 const root = ReactDOM.createRoot(document.getElementById("root"))
 root.render(
-  <GoogleOAuthProvider clientId='110291498666-7oq1hes91n5r5sggu2ab9rt54lrrkb5r.apps.googleusercontent.com'>
+  <GoogleOAuthProvider clientId={REACT_APP_GOOGLE_CLIENT_ID}>
   <ApolloProvider client={client}>
     <RouterProvider router={routes}>
     <App />

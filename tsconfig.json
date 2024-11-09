@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+      "moduleResolution": "Node",
+      "esModuleInterop": true,
+      "allowSyntheticDefaultImports": true
+    },
+    "include": ["src", "src/Types","src/**/*"]
+  }
+  

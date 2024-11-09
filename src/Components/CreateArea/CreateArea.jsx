@@ -1,11 +1,11 @@
-import React, { useRef, useState,useEffect } from "react";
+import React, { useState} from "react";
 import AddIcon from '@mui/icons-material/Add';
 import { toast } from "react-hot-toast";
 import { useMutation } from "@apollo/client";
-import {  ADD_NOTE } from "../mutations/noteMutations";
-import { GET_NOTES } from "../queries/noteQueries";
+import {  ADD_NOTE } from "../../Services/Mutations/noteMutations";
+import { GET_NOTES } from "../../Services/Queries/noteQueries";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import OptionsDropdown from "./OptionsDropdown";
+import OptionsDropdown from "../OptionsDropdown/OptionsDropdown";
 import CloseIcon from '@mui/icons-material/Close';
 
 function CreateArea(props) {
@@ -37,7 +37,7 @@ function CreateArea(props) {
   function handleChange(event) {
     const { name, value } = event.target;
     const currentLineIndex = event.target.selectionStart;
-    if (isListing&&name=='description') {
+    if (isListing&&name==='description') {
       // Add a bullet point to each line after the current line
       const lines = value.split("\n");
       let length = 0;
@@ -73,7 +73,7 @@ function CreateArea(props) {
   }
 
   function submitNote(event) {
-    if(note["title"]==''&&note["description"]==''){
+    if(note["title"]===''&&note["description"]===''){
       toast.error('Cannot create empty note')
     }else{
       if(localStorage.getItem('isLoggedIn')){

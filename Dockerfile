@@ -6,9 +6,9 @@ COPY package.json .
 
 RUN yarn install --legacy-peer-deps
 
-RUN yarn build
-
 COPY . .
+
+RUN yarn build
 
 EXPOSE 3000
 

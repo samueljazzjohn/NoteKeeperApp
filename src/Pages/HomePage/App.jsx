@@ -1,19 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
-import Header from "../Components/Header";
-import Footer from "../Components/Footer";
-import Note from "../Components/Note";
-import CreateArea from "../Components/CreateArea";
+import Header from "../../Layout/Header";
+import Footer from "../../Layout/Footer";
+import Note from "../../Layout/Note";
+import CreateArea from "../../Components/CreateArea/CreateArea";
 import { Toaster } from "react-hot-toast";
-import DropdownMenu from "../Components/DropdownMenu";
-import LoginModel from "../Components/login/LoginModel";
-import { ApolloProvider, ApolloClient, InMemoryCache, gql, useQuery } from '@apollo/client';
-import { GET_NOTES } from "../queries/noteQueries";
-import RegistrationModel from "../Components/registration/RegistrationModel";
-import NoteModel from "../Components/note/NoteModel";
-import WithAuth from "../auth/WithAuth";
+import DropdownMenu from "../../Components/DropdownMenu/DropdownMenu";
+import LoginModel from "../../Components/Modals/LoginModal/LoginModel";
+import { useQuery } from '@apollo/client';
+import { GET_NOTES } from "../../Services/Queries/noteQueries";
+import RegistrationModel from "../../Components/Modals/RegistrationModal/RegistrationModel";
+import NoteModel from "../../Components/Modals/NoteModal/NoteModel";
 import { useNavigate } from "react-router-dom";
-import ForgetPasswordModel from "../Components/login/ForgetPasswordModel";
-import LoadingScreen from "./LoadingScreen";
+import ForgetPasswordModel from "../../Components/Modals/ForgetPasswordModal/ForgetPasswordModel";
+import LoadingScreen from "../LoadingPage/LoadingScreen";
 
 
 function App() {
@@ -29,8 +28,8 @@ function App() {
   const [noteModel, setNoteModel] = React.useState(false)
   const [offset, setOffset] = useState(0)
   const navigate = useNavigate()
-  const [forgetModel,setForgetModel]=useState(false)
-  const [isLoading,setLoading] = useState(false)
+  const [forgetModel, setForgetModel] = useState(false)
+  const [isLoading, setLoading] = useState(false)
 
   const ref = useRef()
 
@@ -42,7 +41,7 @@ function App() {
       navigate('/')
       setLoggedIn(false)
     }
-  }, [loggedIn])
+  }, [loggedIn, navigate])
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -56,7 +55,7 @@ function App() {
     }
   }, [ref])
 
-  const { loading, error, data, fetchMore } = useQuery(GET_NOTES, {
+  const { data, fetchMore } = useQuery(GET_NOTES, {
     context: {
       headers: {
         "authorization": `Bearer ${localStorage.getItem("token")}`,
@@ -94,14 +93,14 @@ function App() {
   return (
     <>
       <div className="h-screen w-full justify-between flex flex-col ">
-      {isLoading && <LoadingScreen/>}
+        {isLoading && <LoadingScreen />}
         <Header dropDown={dropDown} setDropdown={setDropdown} setNote={setNotes} />
         <CreateArea onAdd={addNote} />
         {forgetModel && <ForgetPasswordModel className='z-999' setForgetModel={setForgetModel} />}
-        {loginModel && <LoginModel className='z-999' setLoginModel={setLoginModel} setRegistrationModel={setRegistrationModel} setLoggedIn={setLoggedIn} setForgetModel={setForgetModel} setLoading={setLoading}/>}
-        {registrationModel && <RegistrationModel className='z-99999' setRegistrationModel={setRegistrationModel} setLoginModel={setLoginModel} />}
+        {loginModel && <LoginModel className='z-999' setLoginModel={setLoginModel} setRegistrationModel={setRegistrationModel} setLoggedIn={setLoggedIn} setForgetModel={setForgetModel} setLoading={setLoading} />}
+        {registrationModel && <RegistrationModel className='z-999' setRegistrationModel={setRegistrationModel} setLoginModel={setLoginModel} />}
         <DropdownMenu refvar={ref} DropdownStatus={dropDown} loggedIn={loggedIn} setLoginModel={setLoginModel} setLoggedIn={setLoggedIn} />
-        <div className="z-10  md:grid grid-cols-1 md:grid-cols-3 gap-5 justify-center overflow-x-scroll px-[20px] mb-[60px] md:px-[150px] py-[10px] md:py-[50px] shrink-0" onScroll={handleScroll}>
+        <div className="z-10 md:grid grid-cols-1 md:grid-cols-3 gap-5 justify-center overflow-x-scroll px-[20px] mb-[60px] md:px-[150px] py-[10px] md:py-[50px] shrink-0" onScroll={handleScroll}>
           {notes.map((noteItem, index) => {
             return (
               <Note

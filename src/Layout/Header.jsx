@@ -5,7 +5,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import {useForm} from 'react-hook-form'
 import LoginIcon from '@mui/icons-material/Login';
 import { useMutation } from "@apollo/client";
-import { SEARCH_NOTE } from "../mutations/noteMutations";
+import { SEARCH_NOTE } from "../Services/Mutations/noteMutations";
 
 function Header({dropDown,setDropdown,setNote}) {
 
@@ -46,7 +46,7 @@ function Header({dropDown,setDropdown,setNote}) {
   }
 
   return (
-    <header className="sticky top-0 h-[10%] md:h-[8%] bg-[#f5ba13] flex flex-row justify-between items-center px-10 z-20">
+    <header className="sticky top-0 h-[10%] md:h-[8%] bg-[#f5ba13] flex flex-row justify-between items-center px-10">
       <div className="flex flex-row">
       <h1 className="text-white font-display font-[600] text-[30px]">
         <HighlightIcon className="-translate-y-1 m-2"/>

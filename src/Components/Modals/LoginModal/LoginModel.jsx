@@ -2,27 +2,26 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Popover } from 'react-tiny-popover';
 import { useMutation } from '@apollo/client'
-import { LOGIN_USER, GOOGLE_LOGIN, FACEBOOK_LOGIN } from '../../mutations/userMutations';
+import { LOGIN_USER } from '../../../Services/Mutations/userMutations';
 import { toast } from 'react-hot-toast';
 import FacebookLogin from 'react-facebook-login';
 import GithubLogin from 'react-github-login';
 import { FaFacebookSquare } from 'react-icons/fa'
 import { BsGithub } from 'react-icons/bs'
 import { FcGoogle } from 'react-icons/fc'
-import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
+import { useFacebookLogin } from '../../../hooks/useFacebookLogin.ts';
+import { useGithubLogin } from '../../../hooks/useGithubLogin.ts';
+import { useGoogleOAuth } from '../../../hooks/useGoogleOAuth.ts';
+import getConfig from '../../../Config/config';
 
 
-const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel,setForgetModel,setLoading }) => {
+const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel, setForgetModel, setLoading }) => {
 
-    const navigate =useNavigate()
-
+    const { REACT_APP_FACEBOOK_APP_ID, REACT_APP_GITHUB_CLIENT_ID } = getConfig();
+    const navigate = useNavigate()
     const [loginUser] = useMutation(LOGIN_USER);
-    const [loginGoogle] = useMutation(GOOGLE_LOGIN);
-    const [loginFacebook] = useMutation(FACEBOOK_LOGIN);
-
     const { register, handleSubmit, formState: { errors }, reset } = useForm({ resolver: yupResolver(schema) })
 
     const handleClose = () => {
@@ -57,94 +56,17 @@ const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel,setForget
         setRegistrationModel(true)
     }
 
-    const googleLogin = useGoogleLogin({
-        onSuccess: response => {
-            setLoading(true)
-            fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
-                headers: {
-                    Authorization: `Bearer ${response.access_token}`,
-                },
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    loginGoogle({ variables: { email: data.email, username: data.given_name } }).then((res) => {
-                        console.log(res.data.loginGoogle)
-                        toast.success('Login Successful')
-                        localStorage.setItem('token', res.data.loginGoogle.token)
-                        localStorage.setItem('isLoggedIn', true)
-                        localStorage.setItem('user', res.data.loginGoogle.user.username)
-                        setLoading(false)
-                        navigate(`/home`)
-                        setLoggedIn(true)
-                        handleClose()
-                    }).catch((err) => {
-                        setLoading(false)
-                        console.log(err.message)
-                        toast.error('Login Failed')
-                    })
+    const { handleFacebookLogin } = useFacebookLogin({ setLoggedIn, handleClose });
+    const { handleGithubLogin } = useGithubLogin({ setLoggedIn, setLoading, handleClose, navigate });
+    const { googleLogin } = useGoogleOAuth({ setLoggedIn, setLoading, handleClose, navigate });
 
-                })
-                .catch(error => {
-                    setLoading(false)
-                    console.error(error.message);
-                });
-        },
-        onFailure: response => console.log(response),
-        clientId: 'GOOGLE_CLIENT_ID',
-        // ...other props
-    });
+    const handleSuccess = (response) => {
+        handleGithubLogin(response?.code)
+      };
 
-    const handleFacebookLogin = (response) => {
-        loginFacebook({ variables: { email: response.email, username: response.name } }).then((res) => {
-            console.log(res.data.loginFacebook)
-            toast.success('Login Successful')
-            localStorage.setItem('user', res.data.login.user.username)
-            localStorage.setItem('token', res.data.loginFacebook.token)
-            localStorage.setItem('isLoggedIn', true)
-            setLoggedIn(true)
-            handleClose()
-        }).catch((err) => {
-            console.log(err.message)
-            toast.error('Login Failed')
-        })
-    };
-
-    const handleGithubLogin = (response) => {
-        if (response.error == 'The popup was closed') {
-            toast.error('Login Failed')
-        } else {
-            // Handle Github sign-in
-            fetch("https://github.com/login/oauth/access_token", {
-                mode: "cors",
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Accept: "application/json",
-                },
-                body: JSON.stringify({
-                    client_id: "6c74ad4eebe76f8e5549",
-                    client_secret: "a7016c963d6c53cc52f572fd9b541fd707c24af0",
-                    code: response.code,
-                }),
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    const access_token = data.access_token;
-                    fetch("https://api.github.com/user", {
-                        headers: {
-                            Authorization: `Bearer ${access_token}`,
-                        },
-                    })
-                        .then((response) => response.json())
-                        .then((data) => {
-                            console.log(data);
-                            // handle user data
-                        });
-                });
-        }
-
-    };
+      const handleFailure = (err) => {
+        toast.error("failed to login to github")
+      };
 
 
     return (
@@ -154,19 +76,19 @@ const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel,setForget
 
                     <div className="relative bg-white rounded-lg border shadow-lg">
                         <button type="button" onClick={handleClose} className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center " data-modal-hide="authentication-modal">
-                            <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                            <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
                             <span className="sr-only">Close modal</span>
                         </button>
                         <div className="px-6 py-6 lg:px-8">
                             <h3 className="mb-4 text-xl font-bold text-gray-900 text-center ">SignIn</h3>
                             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" action="#">
                                 <div>
-                                    <label for="email" className="block mb-2 text-sm font-medium text-gray-900">Your email</label>
+                                    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">Your email</label>
                                     <input {...register('email')} type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 focus:outline-none text-sm rounded-lg block w-full p-2.5 " placeholder="name@company.com" />
                                     <p className={`text-sm bg-red-600 text-white opacity-80 ${errors.email && "p-1 mt-1 px-4"} rounded-md`}>{errors.email?.message}</p>
                                 </div>
                                 <div>
-                                    <label for="password" className="block mb-2 text-sm font-medium text-gray-900">Your password</label>
+                                    <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">Your password</label>
                                     <input {...register('password')} type="password" name="password" id="password" placeholder="••••••••" className="bg-gray-50 border focus:outline-none border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 " />
                                     <p className={`text-sm bg-red-600 opacity-80 text-white ${errors.password && "p-1 mt-1 px-4"}  rounded-md`}>{errors.password?.message}</p>
                                 </div>
@@ -175,7 +97,7 @@ const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel,setForget
                                         <div className="flex items-center h-5">
                                             <input {...register('remember')} id="remember" type="checkbox" value="" className="w-4 h-4 border focus:outline-none border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 " required />
                                         </div>
-                                        <label for="remember" className="ml-2 text-sm font-medium text-gray-900 ">Remember me</label>
+                                        <label htmlFor="remember" className="ml-2 text-sm font-medium text-gray-900 ">Remember me</label>
                                     </div>
                                     <a onClick={handleResetPassword} href="#" className="text-sm text-blue-700 hover:underline">Forgot Password?</a>
                                 </div>
@@ -184,12 +106,12 @@ const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel,setForget
                                     <p className='text-center'>or</p>
                                 </div>
                                 <div className='flex flex-row justify-center items-center space-x-10 -translate-y-2'>
-                                    <div className='border border-gray-300 rounded-full p-3'>
+                                    <div className='border border-gray-300 rounded-full p-3 cursor-pointer'>
                                         <FcGoogle size={30} onClick={() => googleLogin()} />
                                     </div>
-                                    <div className='border border-gray-300 rounded-full p-2'>
+                                    <div className='border border-gray-300 rounded-full p-2 cursor-pointer'>
                                         <FacebookLogin
-                                            appId="786061892882373"
+                                            appId={REACT_APP_FACEBOOK_APP_ID}
                                             fields="name,email,picture"
                                             callback={handleFacebookLogin}
                                             icon={<FaFacebookSquare size={30} />}
@@ -198,12 +120,12 @@ const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel,setForget
                                         />
 
                                     </div>
-                                    <div className='border border-gray-300 rounded-full p-2'>
+                                    <div className='border border-gray-300 rounded-full p-2 cursor-pointer'>
                                         <GithubLogin
-                                            clientId="6c74ad4eebe76f8e5549"
+                                            clientId={REACT_APP_GITHUB_CLIENT_ID}
                                             redirectUri="http://localhost:3000"
-                                            onSuccess={handleGithubLogin}
-                                            onFailure={handleGithubLogin}
+                                            onSuccess={handleSuccess}
+                                            onFailure={handleFailure}
                                             buttonText={<BsGithub size={30} />}
                                             aria-label=""
                                             className='h-10 w-10 rounded-full items-center justify-center flex'

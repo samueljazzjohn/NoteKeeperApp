@@ -1,8 +1,8 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import App from './pages/App'
-import ErrorPage from './pages/ErrorPage'
-import ResetMessage from './pages/ResetMessage'
-import ResetPassword from './pages/ResetPassword'
+import { createBrowserRouter } from 'react-router-dom'
+import App from './Pages/HomePage/App'
+import ErrorPage from './Pages/ErrorPage/ErrorPage'
+import ResetMessage from './Pages/ResetPasswordPage/ResetMessage'
+import ResetPassword from './Pages/ResetPasswordPage/ResetPassword'
 
 const router = createBrowserRouter([
   {
