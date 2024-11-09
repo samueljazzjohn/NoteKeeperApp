@@ -19,7 +19,7 @@ import getConfig from '../../../Config/config';
 
 const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel, setForgetModel, setLoading }) => {
 
-    const { REACT_APP_FACEBOOK_APP_ID, REACT_APP_GITHUB_CLIENT_ID } = getConfig();
+    const { REACT_APP_FACEBOOK_APP_ID, REACT_APP_GITHUB_CLIENT_ID,REACT_APP_GITHUB_REDIRECT_URI } = getConfig();
     const navigate = useNavigate()
     const [loginUser] = useMutation(LOGIN_USER);
     const { register, handleSubmit, formState: { errors }, reset } = useForm({ resolver: yupResolver(schema) })
@@ -36,7 +36,6 @@ const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel, setForge
 
     const onSubmit = (data) => {
         loginUser({ variables: { email: data.email, password: data.password } }).then((res) => {
-            console.log(res.data.login)
             toast.success('Login Successful')
             localStorage.setItem('token', res.data.login.token)
             localStorage.setItem('isLoggedIn', true)
@@ -123,7 +122,7 @@ const LoginModel = ({ setLoginModel, setLoggedIn, setRegistrationModel, setForge
                                     <div className='border border-gray-300 rounded-full p-2 cursor-pointer'>
                                         <GithubLogin
                                             clientId={REACT_APP_GITHUB_CLIENT_ID}
-                                            redirectUri="http://localhost:3000"
+                                            redirectUri={REACT_APP_GITHUB_REDIRECT_URI}
                                             onSuccess={handleSuccess}
                                             onFailure={handleFailure}
                                             buttonText={<BsGithub size={30} />}
